@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers;
+use App\Mail\MyTestMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+
 
 class AuthController extends Controller
 {
@@ -51,6 +54,7 @@ class AuthController extends Controller
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
+        Mail::to($request->email)->send(new MyTestMail($request->name));
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user
